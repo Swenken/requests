@@ -56,3 +56,13 @@ def nosan_server(tmp_path_factory):
 
     server.shutdown()
     server_thread.join()
+
+@pytest.fixture
+def prepare_url():
+    def _prepare_url(response):
+        base_url = response.url
+        def urljoin(path):
+            from urllib.parse import urljoin as real_urljoin
+            return real_urljoin(base_url, path)
+        return urljoin
+    return _prepare_url
